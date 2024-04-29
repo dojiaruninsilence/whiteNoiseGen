@@ -2,6 +2,13 @@
 
 //==============================================================================
 MainComponent::MainComponent(){
+    levelSlider.setRange(0.0, 0.25);
+    levelSlider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 100, 20);
+    levelLabel.setText("Noise Level", juce::dontSendNotification);
+
+    addAndMakeVisible(&levelSlider);
+    addAndMakeVisible(&levelLabel);
+
     // Make sure you set the size of the component after
     // you add any child components.
     setSize (800, 600);
@@ -32,13 +39,14 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) {
+    auto level = (float)levelSlider.getValue();
     for (auto channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel) {
         // get a pointer to the start sample in the buffer for this audio output channel
         auto* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
 
         // fill the required number of samples with noise between -0.125 and +0.125
         for (auto sample = 0; sample < bufferToFill.numSamples; ++sample) {
-            buffer[sample] = random.nextFloat() * 0.25f - 0.125f;
+            *buffer++ = random.nextFloat() * level;
         }
     }
 }
@@ -56,7 +64,6 @@ void MainComponent::paint (juce::Graphics& g) {
 }
 
 void MainComponent::resized() {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    levelLabel.setBounds(10, 10, 90, 20);
+    levelSlider.setBounds(100, 10, getWidth() - 110, 20);
 }
