@@ -24,8 +24,9 @@ public:
     void resized() override;
 
 private:
+    juce::Random random;
     //==============================================================================
-    // Your private member variables go here...
+    
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
