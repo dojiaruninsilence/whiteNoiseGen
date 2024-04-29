@@ -22,11 +22,17 @@ public:
     //==============================================================================
     void paint (juce::Graphics& g) override;
     void resized() override;
+    void resetParameters();
 
 private:
     juce::Random random;
     juce::Slider levelSlider;
     juce::Label levelLabel;
+    float currentLevel;
+    float targetLevel;
+    int samplesToTarget;
+
+    static constexpr auto rampLengthSamples = 128;
     //==============================================================================
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
